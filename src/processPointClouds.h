@@ -18,7 +18,9 @@
 #include <ctime>
 #include <chrono>
 #include "render/box.h"
+#include <unordered_set>
 
+struct KdTree;
 template<typename PointT>
 class ProcessPointClouds {
 public:
@@ -28,7 +30,34 @@ public:
     //deconstructor
     ~ProcessPointClouds();
 
+     double DistFromPlane(
+        	PointT pt1,
+	    double A, double B, double C, double D);
+
+    std::unordered_set<int> MyRansac3DPlane(
+        typename pcl::PointCloud<PointT>::Ptr cloud, 
+        int maxIterations, 
+        float distanceTol
+    );
+
     void numPoints(typename pcl::PointCloud<PointT>::Ptr cloud);
+
+    void FindProximity(
+        KdTree* tree,
+        float distanceTol, 
+        int Indx,
+        std::vector<int>& clusterIndices,
+        std::map<int,bool>& visited,
+        const std::vector<std::vector<float>>& points
+    );
+
+    std::vector<std::vector<int>> euclideanCluster(
+	    const std::vector<std::vector<float>>& points,
+	     KdTree* tree,
+	    float distanceTol,
+        int minSize,
+        int maxSize
+    );
 
     typename pcl::PointCloud<PointT>::Ptr FilterCloud(typename pcl::PointCloud<PointT>::Ptr cloud, float filterRes, Eigen::Vector4f minPoint, Eigen::Vector4f maxPoint);
 

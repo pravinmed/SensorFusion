@@ -75,15 +75,58 @@ void render2DTree(Node* node, pcl::visualization::PCLVisualizer::Ptr& viewer, Bo
 
 }
 
-std::vector<std::vector<int>> euclideanCluster(const std::vector<std::vector<float>>& points, KdTree* tree, float distanceTol)
+
+void FindProximity(
+	KdTree* tree,
+ 	float distanceTol, 
+ 	int Indx,
+ 	std::vector<int>& clusterIndices,
+	std::map<int,bool>& visited,
+	const std::vector<std::vector<float>>& points
+)
 {
+	if (visited.find(Indx) == visited.end()) {
+		clusterIndices.push_back(Indx);
+		visited.insert(std::make_pair(Indx, true));
+		std::vector<int> list = tree->search(points[Indx], distanceTol);
+		for(auto& pt: list)
+		{
+			if (visited.find(pt) == visited.end())
+			{
+				FindProximity(
+						tree, 
+						distanceTol,
+						pt,
+						clusterIndices,
+						visited,
+						points);
+			}
+		}
+	}
+		 
+}
 
+std::vector<std::vector<int>> euclideanCluster(
+	const std::vector<std::vector<float>>& points,
+	 KdTree* tree,
+	 float distanceTol)
+{
 	// TODO: Fill out this function to return list of indices for each cluster
-
+	std::map<int, bool> visited;
 	std::vector<std::vector<int>> clusters;
- 
+	for(int i =0;i < points.size();i++)
+	{
+		if (visited.find(i) == visited.end())
+		{
+			std::vector<int> clusterIndx;
+			FindProximity(tree, distanceTol, i,clusterIndx, visited, points);
+			if (clusterIndx.size() > 0)
+			{
+				clusters.push_back(clusterIndx);
+			}
+		}
+	}
 	return clusters;
-
 }
 
 int main ()
@@ -113,7 +156,7 @@ int main ()
   	render2DTree(tree->root,viewer,window, it);
   
   	std::cout << "Test Search" << std::endl;
-  	std::vector<int> nearby = tree->search({-6,7},3.0);
+  	std::vector<int> nearby = tree->search({7.2, 6.1},3.0);
   	for(int index : nearby)
       std::cout << index << ",";
   	std::cout << std::endl;
@@ -121,7 +164,7 @@ int main ()
   	// Time segmentation process
   	auto startTime = std::chrono::steady_clock::now();
   	//
-  	std::vector<std::vector<int>> clusters = euclideanCluster(points, tree, 3.0);
+	std::vector<std::vector<int>> clusters = euclideanCluster(points, tree, 3.0);
   	//
   	auto endTime = std::chrono::steady_clock::now();
   	auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
