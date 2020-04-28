@@ -71,7 +71,7 @@ void cityBlock(
     std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> cloudClusters = 
         pointProcessorI->Clustering(segmentCloud.second, .6, 20, 250);
    
-    //renderPointCloud(viewer,segmentCloud.second,"outputCloud");
+    renderPointCloud(viewer,segmentCloud.first,"outputCloud");
     std::vector<Color> colors = {
             Color(1,0,0),
             Color(0,1,0),

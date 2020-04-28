@@ -336,7 +336,7 @@ std::vector<typename pcl::PointCloud<PointT>::Ptr> ProcessPointClouds<PointT>::C
     }
 
     std::vector<std::vector<int>> clusterOfCluster = 
-        euclideanCluster(vecOfPoints, ktree, 3.0, minSize, maxSize);
+        euclideanCluster(vecOfPoints, ktree, clusterTolerance, minSize, maxSize);
     if (clusterOfCluster.size() > 0) {
         for(auto& clusterSet: clusterOfCluster)
         {
