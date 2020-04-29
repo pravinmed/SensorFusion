@@ -51,12 +51,12 @@ void cityBlock(
     //    pointProcessorI->loadPcd("../src/sensors/data/pcd/data_1/0000000000.pcd");
     Eigen::Vector4f minPoint;
     minPoint[0]=-9;  // define minimum point x
-    minPoint[1]=-5;  // define minimum point y
-    minPoint[2]=-2;  // define minimum point z
+    minPoint[1]=-5.0;  // define minimum point y
+    minPoint[2]=-3;  // define minimum point z
     minPoint[3]= 1.0;
     Eigen::Vector4f maxPoint;
     maxPoint[0]=25;  // define max point x
-    maxPoint[1]=5;  // define max point y
+    maxPoint[1]=6;  // define max point y
     maxPoint[2]=1;  // define max point z
     maxPoint[3]=1.0;
     pcl::PointCloud<pcl::PointXYZI>::Ptr outputCloud = 
@@ -69,7 +69,7 @@ void cityBlock(
     //renderPointCloud(viewer,segmentCloud.second,"outputCloud");
    
     std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> cloudClusters = 
-        pointProcessorI->Clustering(segmentCloud.second, .6, 20, 250);
+        pointProcessorI->Clustering(segmentCloud.second, .6, 15, 250);
    
     renderPointCloud(viewer,segmentCloud.first,"outputCloud");
     std::vector<Color> colors = {

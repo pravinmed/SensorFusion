@@ -57,7 +57,7 @@ typename pcl::PointCloud<PointT>::Ptr ProcessPointClouds<PointT>::FilterCloud(
     typename pcl::PointCloud<PointT>::Ptr cloudRes2(new pcl::PointCloud<PointT>());
    
     Eigen::Vector4f minPoint2{-1.5,1.7,-1,1.0}; 
-    Eigen::Vector4f maxPoint2{2.6,1.7,0,1.0};
+    Eigen::Vector4f maxPoint2{2.5,1.7,0,1.0};
     std::vector<int> indices;
   
     boxRoof->setInputCloud(cloud);
